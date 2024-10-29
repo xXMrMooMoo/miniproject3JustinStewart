@@ -2,7 +2,6 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for
 )
 from werkzeug.exceptions import abort
-
 from flaskr.auth import login_required
 from flaskr.db import get_db
 
@@ -39,6 +38,7 @@ def create():
                 (title, body, g.user['id'])
             )
             db.commit()
+            flash("Post created successfully", "success")  # Success message for post creation
             return redirect(url_for('blog.index'))
 
     return render_template('blog/create.html')
@@ -82,6 +82,7 @@ def update(id):
                 (title, body, id)
             )
             db.commit()
+            flash("Post updated successfully", "success")  # Success message for post update
             return redirect(url_for('blog.index'))
 
     return render_template('blog/update.html', post=post)
@@ -93,4 +94,5 @@ def delete(id):
     db = get_db()
     db.execute('DELETE FROM post WHERE id = ?', (id,))
     db.commit()
+    flash("Post deleted successfully", "success")  # Success message for post deletion
     return redirect(url_for('blog.index'))
